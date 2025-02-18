@@ -1,0 +1,52 @@
+/* Reset some default browser styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Basic body styling */
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+}
+
+/* Navigation bar container */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* logo on the left, menu on the right */
+  background-color: #333;
+  padding: 1rem 2rem;
+}
+
+/* Logo styling */
+.nav-logo {
+  color: #fff;
+  font-size: 1.5rem;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Navigation menu styling */
+.nav-menu {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem; /* spacing between menu items */
+}
+
+/* Navigation links */
+.nav-menu li a {
+  color: #ffffff;
+  text-decoration: none;
+  padding: 0.5rem 0.75rem; /* some padding around the link text */
+  transition: background-color 0.3s, color 0.3s; /* smooth hover transition */
+}
+
+/* Hover effect for the nav links */
+.nav-menu li a:hover {
+  background-color: #555; /* slightly lighter than #333 */
+  color: #f5e04d;         /* contrasting color for text on hover */
+  border-radius: 4px;     /* rounded corners */
+}
+
