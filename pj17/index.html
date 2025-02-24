@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Two Column Blog Post</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* Two equal columns */
+      gap: 20px;  /* Space between columns */
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+    .container img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .text-column {
+      /* Additional styling for text content */
+      line-height: 1.6;
+    }
+    /* Responsive: Stack columns on smaller screens */
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Image Column -->
+    <div class="image-column">
+      <img src="your-image.jpg" alt="Blog Post Image">
+    </div>
+    <!-- Text Column -->
+    <div class="text-column">
+      <h1>Blog Post Title</h1>
+      <p>This is the first paragraph of your blog post, where you introduce the topic and capture the reader's interest.</p>
+      <p>Add more paragraphs as needed to flesh out your content. You can include images, quotes, and other elements within this column as well.</p>
+    </div>
+  </div>
+</body>
+</html>
+
