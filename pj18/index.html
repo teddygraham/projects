@@ -4,23 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Character Count Tool</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 20px;
-        }
-        textarea {
-            width: 80%;
-            height: 150px;
-            font-size: 16px;
-            padding: 10px;
-        }
-        p {
-            font-size: 18px;
-            font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -28,14 +12,7 @@
     <textarea id="textInput" placeholder="Start typing..."></textarea>
     <p>Character Count: <span id="charCount">0</span></p>
 
-    <script>
-        const textInput = document.getElementById("textInput");
-        const charCount = document.getElementById("charCount");
-
-        textInput.addEventListener("input", () => {
-            charCount.textContent = textInput.value.length;
-        });
-    </script>
+    <script src="script.js"></script>
 
 </body>
 </html>
