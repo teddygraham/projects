@@ -1,0 +1,12 @@
+{
+  "name": "FaceTrack — Performance Retargeting",
+  "id": "facetrack-retarget-dev",
+  "api": "1.0.0",
+  "main": "dist/code.js",
+  "ui": "ui.html",
+  "editorType": ["figma"],
+  "networkAccess": {
+    "allowedDomains": ["none"],
+    "reasoning": "The demo runs fully offline. Add MediaPipe/TF.js model CDN domains here when wiring real video face detection."
+  }
+}

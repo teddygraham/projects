@@ -1,5 +1,9 @@
 node_modules/
-dist/
 dist-cjs/
 *.log
 .DS_Store
+
+# Build output: dist/code.js IS committed so the plugin imports without a build
+# step. Ignore everything else under dist/.
+dist/*
+!dist/code.js

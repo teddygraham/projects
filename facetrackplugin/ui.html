@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      :root { color-scheme: light dark; }
+      body {
+        font: 12px/1.5 Inter, -apple-system, system-ui, sans-serif;
+        margin: 0;
+        padding: 16px;
+        color: var(--figma-color-text, #1e1e1e);
+        background: var(--figma-color-bg, #fff);
+      }
+      h1 { font-size: 13px; margin: 0 0 4px; }
+      p.sub { margin: 0 0 14px; color: var(--figma-color-text-secondary, #666); }
+      ol { margin: 0 0 14px; padding-left: 18px; color: var(--figma-color-text-secondary, #666); }
+      button {
+        width: 100%;
+        padding: 9px 12px;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-bottom: 8px;
+      }
+      .primary { background: var(--figma-color-bg-brand, #0d99ff); color: #fff; }
+      .secondary {
+        background: transparent;
+        color: var(--figma-color-text, #1e1e1e);
+        border: 1px solid var(--figma-color-border, #e6e6e6);
+      }
+      #status {
+        margin-top: 12px;
+        padding: 10px;
+        border-radius: 6px;
+        background: var(--figma-color-bg-secondary, #f5f5f5);
+        white-space: pre-wrap;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        display: none;
+      }
+      #status.error { color: var(--figma-color-text-danger, #d33); }
+    </style>
+  </head>
+  <body>
+    <h1>FaceTrack — Performance Retargeting</h1>
+    <p class="sub">Retarget a facial performance onto a Figma rig.</p>
+    <ol>
+      <li>Select a layer (ideally inside a frame with a Motion timeline).</li>
+      <li>Run the demo to write smoothed, reduced keyframes onto it.</li>
+      <li>Open the Motion panel to see / hand-edit the result.</li>
+    </ol>
+
+    <button class="primary" id="demo">Generate demo animation</button>
+    <button class="secondary" id="close">Close</button>
+
+    <div id="status"></div>
+
+    <script>
+      const statusEl = document.getElementById("status");
+      function show(text, isError) {
+        statusEl.style.display = "block";
+        statusEl.className = isError ? "error" : "";
+        statusEl.textContent = text;
+      }
+
+      document.getElementById("demo").onclick = () =>
+        parent.postMessage({ pluginMessage: { type: "generate-demo" } }, "*");
+      document.getElementById("close").onclick = () =>
+        parent.postMessage({ pluginMessage: { type: "close" } }, "*");
+
+      onmessage = (event) => {
+        const msg = event.data.pluginMessage;
+        if (!msg) return;
+        if (msg.type === "error") {
+          show(msg.message, true);
+        } else if (msg.type === "done") {
+          const lines = Object.keys(msg.reduction).map(
+            (k) => `${k}: ${msg.reduction[k].before} → ${msg.reduction[k].after} keyframes`
+          );
+          show(`Applied to "${msg.node}".\n` + lines.join("\n"), false);
+        }
+      };
+    </script>
+  </body>
+</html>

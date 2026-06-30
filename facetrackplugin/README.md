@@ -2,11 +2,13 @@
 
 **Retarget a facial performance onto a Figma rig.**
 
-A Figma Motion plugin that analyzes a video of a face and drives a Figma
-component's keyframe tracks from it. This repo holds the **analysis pipeline**
-— the part that turns a noisy, gappy stream of per-frame measurements into a
-small set of clean, editable Motion keyframes — plus a worked critique of the
-design.
+A Figma Motion plugin that analyzes a facial performance and drives a Figma
+node's Motion keyframe tracks from it. This repo is a **loadable plugin**
+(manifest + UI + sandbox code) wrapped around an **analysis pipeline** — the
+part that turns a noisy, gappy stream of per-frame measurements into a small
+set of clean, editable Motion keyframes — plus a worked critique of the design.
+
+> **Load it in 30 seconds — see [Load into Figma](#load-into-figma) below.**
 
 > The reframe that drives everything here: this is *not* "face detection in
 > Figma," it's *retargeting a performance onto a rig*. That's why the leverage
@@ -49,22 +51,41 @@ Entry point: [`analyzeToKeyframes`](src/pipeline.ts).
 | `src/applyTrack.ts` | Map a track → `applyManualKeyframeTrack` args (radians→degrees) |
 | `src/pipeline.ts` | Orchestrates the five stages |
 
-## Run it
+## Load into Figma
+
+The plugin shell is here: `manifest.json`, `ui.html`, and `code.ts` (compiled to
+`dist/code.js`, which **is committed** so you can import without building).
+
+1. Open the **Figma desktop app** (dev plugins don't load in the browser).
+2. **Menu → Plugins → Development → Import plugin from manifest…**
+3. Select this folder's **`manifest.json`**.
+4. Select any layer, then run **Plugins → Development → FaceTrack — Performance
+   Retargeting**.
+5. Click **Generate demo animation**. It writes smoothed, reduced Motion
+   keyframes (mouth → `TRANSLATION_Y`, head roll → `ROTATION` in degrees) onto
+   the selected layer. Open the **Motion** panel to see and hand-edit them.
+
+> The demo uses a *synthetic* performance so it runs offline with no face
+> detection. To drive it from real video, do MediaPipe/TF.js detection in
+> `ui.html`, post `FrameSample[]` to `code.ts` (`{ type: "apply-samples" }`),
+> and add the model CDN to `manifest.json` → `networkAccess`. The analysis
+> pipeline is already wired — see `code.ts`.
+
+If you edit `code.ts`, rebuild with `npm run build` and re-run the plugin.
+
+## Run it (pipeline tests)
 
 ```bash
 npm install
 npm run typecheck          # tsc --noEmit, clean
-npm run build && node dist-cjs/smoke.js   # see note below
+npm run build              # esbuild → dist/code.js (the plugin bundle)
+npm run smoke              # runs the synthetic-clip pipeline test
 ```
 
 The smoke test (`src/smoke.ts`) runs a synthetic 5s/30fps clip with injected
-jitter and a detection dropout, and prints the keyframe reduction and the
-degrees-correct rotation peak. (For a quick run use a CommonJS build:
-`npx tsc --module CommonJS --moduleResolution Node --outDir dist-cjs && node dist-cjs/smoke.js`.)
-
-Expected output: ~150 raw frames reduced to ~20 keyframes per track, and a
-rotation peak in the ~10° range (degrees) rather than ~0.15 (radians) — proof
-the conversion is applied.
+jitter and a detection dropout. Expected output: ~150 raw frames reduced to ~20
+keyframes per track, and a rotation peak in the ~10° range (degrees) rather than
+~0.15 (radians) — proof the conversion is applied.
 
 ## Wiring into the plugin
 
@@ -91,8 +112,20 @@ importantly that `ROTATION` is in **degrees** and timeline positions are in
   API surface; what was confirmed vs. what to check in-editor.
 - [`docs/ROADMAP.md`](docs/ROADMAP.md) — v1 / v1.5 / v2, ordered by leverage.
 
+## Project layout
+
+```
+manifest.json     Figma plugin manifest (import this)
+ui.html           plugin panel (vanilla, themeable)
+code.ts           sandbox entry: pipeline → applyManualKeyframeTrack
+dist/code.js      committed build output (so it loads without building)
+src/              the analysis pipeline (see table above)
+docs/             critique assessment, Motion API findings, roadmap
+```
+
 ## Status
 
-v1 analysis pipeline implemented and typechecked. Host wiring (calling the
-Motion API from `code.ts`, node-id persistence, UI sliders) is the next step —
-see the roadmap.
+v1 analysis pipeline implemented, typechecked, and wrapped in a loadable plugin
+(synthetic-demo path working end-to-end against the Motion API). Next:
+UI-side face detection (MediaPipe/TF.js), node-id persistence, and per-track
+sliders — see [`docs/ROADMAP.md`](docs/ROADMAP.md).

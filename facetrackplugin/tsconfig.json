@@ -10,7 +10,8 @@
     "noUnusedParameters": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "typeRoots": ["./node_modules/@types", "./node_modules/@figma"],
     "outDir": "dist"
   },
-  "include": ["src"]
+  "include": ["src", "code.ts"]
 }

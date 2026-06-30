@@ -2,12 +2,16 @@
   "name": "facetrackplugin",
   "version": "0.1.0",
   "private": true,
-  "description": "Retarget a facial performance onto a Figma rig — smoothing, calibration, and keyframe-reduction pipeline for the Figma Motion plugin.",
+  "description": "Retarget a facial performance onto a Figma rig — a Figma Motion plugin with a smoothing, calibration, and keyframe-reduction analysis pipeline.",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "build": "tsc"
+    "build": "esbuild code.ts --bundle --target=es2019 --format=iife --outfile=dist/code.js",
+    "watch": "esbuild code.ts --bundle --target=es2019 --format=iife --outfile=dist/code.js --watch",
+    "smoke": "tsc --module CommonJS --moduleResolution Node --outDir dist-cjs && node dist-cjs/smoke.js"
   },
   "devDependencies": {
+    "@figma/plugin-typings": "^1.100.0",
+    "esbuild": "^0.21.0",
     "typescript": "^5.4.0"
   }
 }
